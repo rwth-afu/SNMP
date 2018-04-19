@@ -1,0 +1,198 @@
+RWTHAFU-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+MODULE-IDENTITY, OBJECT-TYPE, Integer32, Counter32, Gauge32, IpAddress,
+enterprises FROM SNMPv2-SMI
+TEXTUAL-CONVENTION, DisplayString, DateAndTime FROM SNMPv2-TC
+OBJECT-GROUP FROM SNMPv2-CONF;
+
+rwthafuModule MODULE-IDENTITY
+  LAST-UPDATED "201804190000Z"
+  ORGANIZATION "Ham Radio Group at RWTH Aachen"
+  CONTACT-INFO "rwth-afu@online.de"
+  DESCRIPTION "The general RWTH AFU MIB"
+  REVISION "201804190000Z"
+  DESCRIPTION "Added GM1200"
+  ::= { rwthafu 1 }
+
+rwthafu OBJECT IDENTIFIER ::= { enterprises 51218 }
+rwthafuXMetaInfo OBJECT IDENTIFIER ::= { rwthafuModule 2 }
+rwthafuXGroups OBJECT IDENTIFIER ::= { rwthafuXMetaInfo 1 }
+
+rwthafuPOCSAG OBJECT IDENTIFIER ::= { rwthafuModule 1 }
+rwthafuUnipager OBJECT IDENTIFIER ::= { rwthafuPOCSAG 1 }
+rwthafuC9000 OBJECT IDENTIFIER ::= { rwthafuPOCSAG 2 }
+rwthafuGM1200 OBJECT IDENTIFIER ::= { rwthafuPOCSAG 3 }
+
+Voltage ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d-1"
+    STATUS current
+    DESCRIPTION "Voltage"
+    SYNTAX Integer32 (-2147483648..2147483647)
+
+Temperature ::= TEXTUAL-CONVENTION
+    DISPLAY-HINT "d-1"
+    STATUS current
+    DESCRIPTION "Temperature"
+    SYNTAX Integer32 (-2147483648..2147483647)
+
+-- C9000 ********************************************************************
+
+rwthafuC9000TempPA OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "PA Temp in deg C"
+    ::= { rwthafuC9000 1 }
+
+rwthafuC9000TempBoard OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Board Temp in deg C"
+    ::= { rwthafuC9000 2 }
+
+rwthafuC9000Group OBJECT-GROUP OBJECTS {
+    rwthafuC9000TempPA,
+    rwthafuC9000TempBoard
+    }
+    STATUS current
+    DESCRIPTION "C9000 Group"
+    ::= { rwthafuXGroups 1 }
+
+-- ***************************************************************************
+
+-- UniPager ********************************************************************
+
+rwthafuUnipagerVersion OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Version of Unipager"
+    ::= { rwthafuUnipager 1 }
+
+rwthafuUnipagerMaster OBJECT-TYPE
+    SYNTAX OCTET STRING
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Connected DAPNET Core"
+    ::= { rwthafuUnipager 2 }
+
+rwthafuUnipagerQueueTotal OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length"
+    ::= { rwthafuUnipager 3 }
+
+rwthafuUnipagerPrioQueue OBJECT IDENTIFIER ::= { rwthafuUnipager 4 }
+
+rwthafuUnipagerQueuePrio1 OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length Prio 1"
+    ::= { rwthafuUnipagerPrioQueue 1 }
+
+rwthafuUnipagerQueuePrio2 OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length Prio 2"
+    ::= { rwthafuUnipagerPrioQueue 2 }
+
+rwthafuUnipagerQueuePrio3 OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length Prio 3"
+    ::= { rwthafuUnipagerPrioQueue 3 }
+
+rwthafuUnipagerQueuePrio4 OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length Prio 4"
+    ::= { rwthafuUnipagerPrioQueue 4 }
+
+rwthafuUnipagerQueuePrio5 OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Queue length Prio 5"
+    ::= { rwthafuUnipagerPrioQueue 5 }
+
+rwthafuUnipagerCallsRX OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Received Calls"
+    ::= { rwthafuUnipager 5 }
+
+rwthafuUnipagerCallsTX OBJECT-TYPE
+    SYNTAX Gauge32
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Transmitted Calls"
+    ::= { rwthafuUnipager 6 }
+
+rwthafuUnipagerGroup OBJECT-GROUP OBJECTS {
+    rwthafuUnipagerVersion,
+    rwthafuUnipagerMaster,
+    rwthafuUnipagerQueueTotal,
+    rwthafuUnipagerQueuePrio1,
+    rwthafuUnipagerQueuePrio2,
+    rwthafuUnipagerQueuePrio3,
+    rwthafuUnipagerQueuePrio4,
+    rwthafuUnipagerQueuePrio5,
+    rwthafuUnipagerCallsRX,
+    rwthafuUnipagerCallsTX
+    }
+    STATUS current
+    DESCRIPTION "Unipager Group"
+    ::= { rwthafuXGroups 2 }
+-- ***************************************************************************
+
+-- GM1200 ********************************************************************
+rwthafuGM1200TempAirIn OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Air In Temp in deg C"
+    ::= { rwthafuGM1200 1 }
+
+rwthafuGM1200TempAirOut OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Air Out Temp in deg C"
+    ::= { rwthafuGM1200 2 }
+
+rwthafuC9000TempGM1200 OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "GM1200 Supply Temp in deg C"
+    ::= { rwthafuGM1200 3 }
+
+rwthafuC9000TempSupply OBJECT-TYPE
+    SYNTAX Temperature
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION "Power Supply Temp in deg C"
+    ::= { rwthafuGM1200 4 }
+
+rwthafuGM12000Group OBJECT-GROUP OBJECTS {
+    rwthafuGM1200TempAirIn,
+    rwthafuGM1200TempAirOut,
+    rwthafuC9000TempGM1200,
+    rwthafuC9000TempSupply
+    }
+    STATUS current
+    DESCRIPTION "GM1200 Group"
+    ::= { rwthafuXGroups 3 }
+
+-- ***************************************************************************
+
+
+END
